@@ -8,13 +8,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void finddisjoint(int*, unsigned int);
-int findpartition(int*, int*, unsigned int, int, int, int, int*);
+int *arr, *mark;
+unsigned int n, opcount;
+int target;
+
+void finddisjoint();
+int findpartition(int, int);
 
 int main() {
-	int* arr;
-	unsigned int n;
-
 	printf("Enter the number of elements in the array: ");
 	scanf("%d", &n);
 
@@ -25,29 +26,31 @@ int main() {
 		scanf("%d", arr+i);
 	}
 
-	finddisjoint(arr, n);
+	finddisjoint();
 
 	free(arr);
+    arr = NULL;
 
 	return 0;
 }
 
-void finddisjoint(int* arr, unsigned int n) {
+void finddisjoint() {
 	int sum = 0;
-	int opcount = 0;
-	int flag = 0;
-	int* mark = NULL;
+    int flag = 0;
+
+	opcount = 0;
+	mark = NULL;
 
 	for(int i=0; i<n; i++) {
 		sum += arr[i];
 	}
 
 	if(sum%2 == 0) {
-		sum = sum/2;
+		target = sum/2;
 
 		mark = (int*) calloc(n, sizeof(int));
 
-		flag = findpartition(arr, mark, n, 0, 0, sum, &opcount);
+		flag = findpartition(0, 0);
 	}
 
 	printf("Operation Count: %d\n", opcount);
@@ -76,11 +79,12 @@ void finddisjoint(int* arr, unsigned int n) {
 
 	if(mark) {
 		free(mark);
+        mark = NULL;
 	}
 }
 
-int findpartition(int *arr, int* mark, unsigned int n, int i, int sum, int target, int* opcount) {
-	*opcount += 1;
+int findpartition(int i, int sum) {
+	opcount += 1;
 	sum += arr[i];
 	mark[i] = 1;
 
@@ -93,7 +97,7 @@ int findpartition(int *arr, int* mark, unsigned int n, int i, int sum, int targe
 	}
 
 	for(int j=i+1; j<n; j++) {
-		if(findpartition(arr, mark, n, j, sum, target, opcount)) {
+		if(findpartition(j, sum)) {
 			return 1;
 		}
 	}
