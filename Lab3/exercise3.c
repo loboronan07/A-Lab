@@ -12,6 +12,8 @@ int *arr, *mark;
 unsigned int n, opcount;
 int target;
 
+int incrementmark();
+int getmarkedsum();
 void finddisjoint();
 int findpartition(int, int);
 
@@ -46,11 +48,19 @@ void finddisjoint() {
 	}
 
 	if(sum%2 == 0) {
-		target = sum/2;
-
 		mark = (int*) calloc(n, sizeof(int));
-
-		flag = findpartition(0, 0);
+		while(1) {
+			opcount++;
+			if(incrementmark()) {
+				if(getmarkedsum() == sum/2) {
+					flag = 1;
+					break;
+				}
+			}
+			else {
+				break;
+			}
+		}
 	}
 
 	printf("Operation Count: %d\n", opcount);
@@ -83,25 +93,27 @@ void finddisjoint() {
 	}
 }
 
-int findpartition(int i, int sum) {
-	opcount += 1;
-	sum += arr[i];
-	mark[i] = 1;
+int getmarkedsum() {
+	int sum = 0;
 
-	if(sum == target) {
-		return 1;
-	}
-	else if(sum > target) {
-		mark[i] = 0;
-		return 0;
-	}
-
-	for(int j=i+1; j<n; j++) {
-		if(findpartition(j, sum)) {
-			return 1;
+	for(int i=0; i<n; i++) {
+		if(mark[i] == 1) {
+			sum += arr[i];
 		}
 	}
 
-	mark[i] = 0;
-	return 0;
+	return sum;
+}
+
+int incrementmark() {
+	int carry = 1;
+	int sum = 0;
+
+	for(int i=0; i<n && carry==1; i++) {
+		sum = mark[i] + carry;
+		mark[i] = sum%2;
+		carry = sum/2;
+	}
+
+	return carry==0;
 }
