@@ -17,7 +17,7 @@ int main() {
 	printf("Enter %d values to insert into BST:\n", n);
 	for(int i=0; i<n; i++) {
 		scanf("%d", &ele);
-		root = create(root, ele);
+		root = createavl(root, ele);
 	}
 
 	printf("\nPrerder Traversal with Balance Factors of nodes in BST: ");
