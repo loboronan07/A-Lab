@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 int* countingsort(int*, int);
-void getminmax(int*, int, int*, int*);
 
 int main() {
 	int *arr, n;
