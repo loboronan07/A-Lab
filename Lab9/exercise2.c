@@ -8,13 +8,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "linked.h"
+
+typedef struct node {
+	int data;
+	struct node* next;
+} node;
 
 int opcount;
 
 node** createhash(int*, int, int);
 int search(node**, int, int);
 void freehash(node**, int);
+
+node* insertll(node*, int);
+node* getnode(int);
+int searchll(node*, int);
+void freell(node*);
 
 int main() {
 	int *arr, n;
@@ -70,11 +79,61 @@ node** createhash(int* arr, int n, int key) {
 int search(node** hash, int key, int ele) {
 	int pos = ele % key;
 
+	opcount++;
+
 	return searchll(hash[pos], ele);
 }
 
 void freehash(node** hash, int key) {
 	for(int i=0; i<key; i++) {
 		freell(hash[i]);
+	}
+}
+
+node* getnode(int ele) {
+	node* n = (node*) malloc(sizeof(node));
+	n->data = ele;
+	n->next = NULL;
+
+	return n;
+}
+
+node* insertll(node* head, int ele) {
+	node* temp = getnode(ele);
+
+	if(head == NULL) 
+		head = temp;
+	else {
+		node* curr = head;
+		while(curr->next != NULL) {
+			curr = curr->next;
+		}
+		curr->next = temp;
+	}
+
+	return head;
+}
+
+int searchll(node* head, int ele) {
+	node* curr = head;
+
+	while(curr) {
+		opcount++;
+		if(curr->data == ele) {
+			return 1;
+		}
+
+		curr = curr->next;
+	}
+
+	return 0;
+}
+
+void freell(node* head) {
+	node* temp;
+	while(head != NULL) {
+		temp = head;
+		head = head->next;
+		free(temp);
 	}
 }

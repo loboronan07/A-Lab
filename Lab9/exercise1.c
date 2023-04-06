@@ -18,9 +18,9 @@ int main() {
 	scanf(" %[^\n]s", text);
 
 	printf("Enter the pattern string:\n");
-	scanf(" %[^\n]s", pattern);
+	scanf(" %[^\n]s", pat);
 
-	pos = strmatch(text, pattern);
+	pos = strmatch(text, pat);
 
 	if(pos < 0) {
 		printf("Pattern not found in text...\n");
@@ -50,6 +50,28 @@ int* createTable(char* str) {
 int strmatch(char* text, char* pat) {
 	int m = strlen(text);
 	int n = strlen(pat);
+	int opcount = 0;
 
-	int* table = createTable()
+	int* table = createTable(pat);
+
+	int i = n-1;
+
+	while(i<m) {
+		int k = 0;
+
+		while(++opcount && k<n && pat[n-1-k]==text[i-k]) {
+			k++;
+		}
+
+		if(k == n) {
+			printf("\nOperation Count: %d\n\n", opcount);
+			return i-n+1;
+		}
+		else {
+			i += table[text[i]];
+		}
+	} 
+
+	printf("\nOperation Count: %d\n\n", opcount);
+	return -1;
 }
