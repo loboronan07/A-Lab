@@ -45,6 +45,9 @@ int main() {
 		printf("Search unsuccessfull with operation count %d...\n", opcount);
 	}
 
+	free(hash);
+	free(arr);
+
 	return 0;
 }
 
