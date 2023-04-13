@@ -97,14 +97,18 @@ void printmat(int** mat, int n) {
 
 int** floyd(int** mat, int n) {
 	int** out = createcopy(mat, n);
+	int opcount = 0;
 
 	for(int k=0; k<n; k++) {
 		for(int i=0; i<n; i++) {
 			for(int j=0; j<n; j++) {
+				opcount++;
 				out[i][j] = MIN(out[i][j], (long) out[i][k] + out[k][j]);
 			}
 		}
 	}
+
+	printf("\nOperation Count: %d\n". opcount);
 
 	return out;
 }

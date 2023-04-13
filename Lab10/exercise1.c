@@ -84,6 +84,7 @@ void printmat(int** mat, int n) {
 int** warshall(int** mat, int n) {
 	int** prev = NULL;
 	int** curr = createcopy(mat, n);
+	int opcount = 0;
 
 	for(int k=0; k<n; k++) {
 		prev = curr;
@@ -91,10 +92,13 @@ int** warshall(int** mat, int n) {
 
 		for(int i=0; i<n; i++) {
 			for(int j=0; j<n; j++) {
+				opcount++;
 				curr[i][j] = prev[i][j] || (prev[i][k] && prev[k][j]);
 			}
 		}
 	}
+
+	printf("\nOperation Count: %d\n", opcount);
 
 	return curr;
 }
