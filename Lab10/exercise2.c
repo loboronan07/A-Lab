@@ -108,7 +108,7 @@ int** floyd(int** mat, int n) {
 		}
 	}
 
-	printf("\nOperation Count: %d\n". opcount);
+	printf("\nOperation Count: %d\n", opcount);
 
 	return out;
 }
