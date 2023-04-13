@@ -1,4 +1,4 @@
-/* Additional Exercise 1
+/* Additional Exercise 2
 	Write a function to find the composition of an optimal subset from the table generated 
     by the bottom-up dynamic programming algorithm for the knapsack problem. 
 */
