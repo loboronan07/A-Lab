@@ -35,9 +35,11 @@ int main() {
 
 int knapsack(int* w, int* v, int n, int B) {
 	int** f = initmat(n+1, B+1);
+	int opcount = 0;
 
 	for(int i=1; i<=n; i++) {
 		for(int j=1; j<=B; j++) {
+			opcount++;
 			if(j - w[i-1] >= 0) {
 				f[i][j] = MAX(f[i-1][j], v[i-1] + f[i-1][j - w[i-1]]);
 			}
@@ -46,6 +48,8 @@ int knapsack(int* w, int* v, int n, int B) {
 			}
 		}
 	}
+
+	printf("Operation Count: %d\n", opcount);
 
 	return f[n][B];
 }
