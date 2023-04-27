@@ -14,6 +14,8 @@ typedef struct {
 
 void sortedges(edge*, int);
 edge* minimumspanning(int, edge*, int);
+int checkcycle(int, edge*, int);
+int cycle(int, edge*, int, int*, int*);
 
 int main() {
 	int vert, e;
@@ -56,20 +58,56 @@ void sortedges(edge* edges, int n) {
 
 edge* minimumspanning(int n, edge* edges, int e) {
 	sortedges(edges, e);
-	
-	int* visited = (int*) calloc(n, sizeof(int));
+
 	edge* min = (edge*) calloc(n-1, sizeof(edge));
 	int i=0;
 	int k=0;
 
 	while(i<e && k<n-1) {
-		if(!visited[edges[i].u] || !visited[edges[i].v]) {
-			min[k++] = edges[i];
-			visited[edges[i].u] = 1;
-			visited[edges[i].v] = 1;
-		}	
+		min[k] = edges[i];
+		if(!checkcycle(n, min, k+1)) {
+			k++;
+		}
 		i++;
 	}
 
 	return min;
+}
+
+int checkcycle(int n, edge* edges, int e) {
+	for(int i=0; i<n; i++) {
+		int* edgevisited = (int*) calloc(e, sizeof(int));
+		int* nodevisited = (int*) calloc(n, sizeof(int));
+		if(cycle(i, edges, e, edgevisited, nodevisited)) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int cycle(int curr, edge* edges, int e, int* edgevisited, int* nodevisited) {
+	if(nodevisited[curr]) {
+		return 1;
+	}
+	nodevisited[curr] = 1;
+
+	for(int i=0; i<e; i++) {
+		if(edgevisited[i]) {
+			continue;
+		}
+		if(edges[i].u == curr) {
+			edgevisited[i] = 1;
+			if(cycle(edges[i].v, edges, e, edgevisited, nodevisited)) {
+				return 1;
+			}
+		}
+		else if(edges[i].v == curr) {
+			edgevisited[i] = 1;
+			if(cycle(edges[i].u, edges, e, edgevisited, nodevisited)) {
+				return 1;
+			}
+		}
+	}
+
+	return 0;
 }
