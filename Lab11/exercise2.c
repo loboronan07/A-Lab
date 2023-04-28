@@ -8,7 +8,6 @@
 #include <limits.h>
 
 #define INFINITY INT_MAX
-#define MIN(a,b) ((a) < (b) ? a : b)
 
 typedef struct {
 	int n;
