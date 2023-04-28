@@ -35,7 +35,7 @@ int main() {
 
 	edge* minspan = minimumspanning(vert, edges, e);
 
-	printf("Edges in the Minimum Spanning Tree:\n");
+	printf("\nEdges in the Minimum Spanning Tree:\n");
 	printf("%4s %4s %4s\n", "u", "v", "w");
 	for(int i=0; i<vert-1; i++) {
 		printf("%4d %4d %4d\n", minspan[i].u, minspan[i].v, minspan[i].w);
@@ -75,11 +75,13 @@ edge* minimumspanning(int n, edge* edges, int e) {
 }
 
 int checkcycle(int n, edge* edges, int e) {
+	int* edgevisited = (int*) calloc(e, sizeof(int));
+	int* nodevisited = (int*) calloc(n, sizeof(int));
 	for(int i=0; i<n; i++) {
-		int* edgevisited = (int*) calloc(e, sizeof(int));
-		int* nodevisited = (int*) calloc(n, sizeof(int));
-		if(cycle(i, edges, e, edgevisited, nodevisited)) {
-			return 1;
+		if(nodevisited[i] == 0) {
+			if(cycle(i, edges, e, edgevisited, nodevisited)) {
+				return 1;
+			}
 		}
 	}
 	return 0;
