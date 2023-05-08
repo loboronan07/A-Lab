@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h>
+#include <string.h>
 
 typedef struct node {
 	int isdata;
@@ -16,13 +16,14 @@ typedef struct node {
 
 typedef struct {
 	node** arr;
+	float* p;
 	int n;
 } pqueue;
 
 pqueue* initpq(int);
 node* create_huff(char*, float*, int);
 node* dequeue(pqueue*);
-void enqueue(pqueue*, node*);
+void enqueue(pqueue*, node*, float);
 void print_inorder(node*, char*);
 
 int main() {
@@ -70,6 +71,7 @@ node* getnode(node* left, node* right) {
 pqueue* initpq(int n) {
 	pqueue* q = (pqueue*) malloc(sizeof(pqueue));
 	q->arr = (node**) calloc(n, sizeof(node*));
+	q->p = (float*) calloc(n, sizeof(int));
 	q->n = n;
 	return q;
 }
@@ -78,13 +80,13 @@ node* create_huff(char* c, float* f, int n) {
 	pqueue* q = initpq(n);
 
 	for(int i=0; i<n; i++) {
-		enqueue(q, getnodedata(c[i], f[i]));
+		enqueue(q, getnodedata(c[i], f[i]), f[i]);
 	}
 
 	while(n > 1) {
 		node* l = dequeue(q);
 		node* r = dequeue(q);
-		enqueue(q, getnode(l, r));
+		enqueue(q, getnode(l, r), l->freq + r->freq);
 		n--;
 	}
 
@@ -97,16 +99,21 @@ node* dequeue(pqueue* q) {
 		if(q->arr[i] != NULL) {
 		    node* temp = q->arr[i];
 		    q->arr[i] = NULL;
-			q->arr[k++] = temp;
+			q->arr[k] = temp;
+			q->p[k] = q->p[i];
+			k++;
 		}
 	}
 
 	for(int i=0; i<k-1; i++) {
 		for(int j=0; j<k-i-1; j++) {
-			if(q->arr[j]->freq > q->arr[j+1]->freq) {
+			if(q->p[j] > q->p[j+1]) {
 				node* temp = q->arr[j];
 				q->arr[j] = q->arr[j+1];
 				q->arr[j+1] = temp;
+				float t = q->p[j];
+				q->p[j] = q->p[j+1];
+				q->p[j+1] = t;
 			}
 		}
 	}
@@ -116,10 +123,11 @@ node* dequeue(pqueue* q) {
 	return temp;
 }
 
-void enqueue(pqueue* q, node* new) {
+void enqueue(pqueue* q, node* new, float pri) {
 	for(int i=0; i<q->n; i++) {
 		if(q->arr[i] == NULL) {
 			q->arr[i] = new;
+			q->p[i] = pri;
 			return;
 		}
 	}
