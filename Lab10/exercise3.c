@@ -17,11 +17,11 @@ int main() {
 	printf("Enter the number of elements: ");
 	scanf("%d", &n);
 
-	weight = (int*) calloc(n, sizeof(int));
-	value = (int*) calloc(n, sizeof(int));
+	weight = (int*) calloc(n+1, sizeof(int));
+	value = (int*) calloc(n+1, sizeof(int));
 
 	printf("Enter the elements as weight, value:\n");
-	for(int i=0; i<n; i++) {
+	for(int i=1; i<=n; i++) {
 		scanf("%d %d", weight+i, value+i);
 	}
 
@@ -40,8 +40,8 @@ int knapsack(int* w, int* v, int n, int B) {
 	for(int i=1; i<=n; i++) {
 		for(int j=1; j<=B; j++) {
 			opcount++;
-			if(j - w[i-1] >= 0) {
-				f[i][j] = MAX(f[i-1][j], v[i-1] + f[i-1][j - w[i-1]]);
+			if(j - w[i] >= 0) {
+				f[i][j] = MAX(f[i-1][j], v[i] + f[i-1][j - w[i]]);
 			}
 			else {
 				f[i][j] = f[i-1][j];
