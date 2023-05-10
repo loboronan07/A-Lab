@@ -9,10 +9,8 @@
 
 int** initmat(int);
 void insertedge(int**, int, int);
-int** createcopy(int**, int);
 void printmat(int**, int);
 int** warshall(int**, int);
-
 
 int main() {
 	int vert, edges, u, v;
@@ -57,20 +55,6 @@ void insertedge(int** mat, int u, int v) {
 	mat[u][v] = 1;
 }
 
-int** createcopy(int** mat, int n) {
-	int** copy = (int**) calloc(n, sizeof(int*));
-
-	for(int i=0; i<n; i++) {
-		copy[i] = (int*) calloc(n, sizeof(int));
-
-		for(int j=0; j<n; j++) {
-			copy[i][j] = mat[i][j];
-		}
-	}
-
-	return copy;
-}
-
 void printmat(int** mat, int n) {
 	for(int i=0; i<n; i++) {
 		for(int j=0; j<n; j++) {
@@ -83,7 +67,7 @@ void printmat(int** mat, int n) {
 
 int** warshall(int** mat, int n) {
 	int** prev = NULL;
-	int** curr = createcopy(mat, n);
+	int** curr = mat;
 	int opcount = 0;
 
 	for(int k=0; k<n; k++) {
